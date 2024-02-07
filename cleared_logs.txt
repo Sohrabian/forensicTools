@@ -1,0 +1,32 @@
+#windows Event for cleared logs (audit Logs)
+#Event ID 1102 and 1100 - For Security Logs 
+#Event ID 104 - For System Logs
+#MITRE T1070-001
+#Location do the Scripting is - C:\Windows\System32
+# https://www.sans.org/blog/working-with-event-log-part-1/
+
+#Filtering Event Logs with FilterHashTable
+#
+Get-WinEvent -FilterHashtable @{LogName='Security'; ID=1102} | Format-List -Property TimeCreate
+	
+TimeCreated : 6/26/2022 10:34:08 AM
+Message     : The audit log was cleared.
+              Subject:
+                Security ID:    S-1-5-21-2977773840-2930198165-1551093962-1000
+                Account Name:   Sec504
+                Domain Name:    SEC504STUDENT
+                Logon ID:       0x1BD38
+
+$startDate = Get-Date 7/1/2022
+$endDate = Get-Date 7/12/2022
+Get-WinEvent -FilterHashtable @{LogName='Security'; StartTime=$startDate; EndTime=$endDate}
+
+#Filtering Event Logs with the PipeLine
+ps C;\Windows\System32> Get-WinEvent -LogName Security | Where-Object -Property Id -EQ 1102 | Format-List -Property TimeCreated, Message
+	TimeCreated : 6/26/2022 10:34:08 AM
+				Message     : The audit log was cleared.
+				Subject:
+                Security ID:    S-1-5-21-2977773840-2930198165-1551093962-1000
+                Account Name:   Sec504
+                Domain Name:    SEC504STUDENT
+                Logon ID:       0x1BD38
